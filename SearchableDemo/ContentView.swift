@@ -9,14 +9,26 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+    let fruits = ["Apple", "Orange", "Banana", "Strawberry", "Lemon", "Grape", "Blueberry", "Mango"]
+    
+    @State private var searchText: String = ""
+    
+    var searchResults: [String] {
+        if searchText.isEmpty {
+            return fruits
+        } else {
+            return fruits.filter { $0.lowercased().contains(searchText.lowercased()) }
         }
-        .padding()
+    }
+    
+    var body: some View {
+        NavigationStack {
+            List(searchResults, id: \.self) { fruit in
+                Text(fruit)
+            }
+            .navigationTitle("Fruits")
+        }
+        .searchable(text: $searchText, prompt: "Type a fruit")
     }
 }
 
